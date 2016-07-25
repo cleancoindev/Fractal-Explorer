@@ -7,6 +7,7 @@ uniform sampler2D texSample;
 
 float pi = 3.14159265358f;
 float e = 2.718281828;
+float c = 1.0053611;
 uniform float maxIterations;
 
 vec2 powc(float x, vec2 s)
@@ -30,6 +31,24 @@ vec2 sinc(vec2 z)
 }
 
 vec2 expc(vec2 z){return powc(e, z);}
+
+float GetAngle(vec2 s)
+{
+	s /= length(s);
+	float signy = sign(s.y);
+	float signx = sign(s.x);
+	float theta;
+	if(signy > 0 && signx > 0)
+		theta = asin(s.y);
+	else if(signy > 0 && signx < 0)
+		theta = pi - asin(s.y);
+	else if(signy < 0 && signx < 0)
+		theta = pi - asin(s.y);
+	else if(signy < 0 && signx > 0)
+		theta = 2 * pi + asin(s.y);
+
+	return theta;
+}
 
 vec2 f(vec2 t)
 {
@@ -68,30 +87,16 @@ vec2 f(vec2 t)
 	r = vec2(0, 0);//*/
 
 	// e^sin(z)
-	//r = expc(sinc(t));
+        //r = expc(sinc(t));
 
 	// drip-drip
 	//r = vec2(sin(length(t-vec2(5, 0))), cos(length(t-vec2(-5, 0))));
 
+	//r = vec2(1/length(t), GetAngle(t));
+
+        r = expc(vec2(10*GetAngle(t)/(2*pi) + log(length(t)), log(length(t)) - 10*GetAngle(t)/(2*pi)));
+
 	return r;
-}
-
-float GetAngle(vec2 s)
-{
-	s /= length(s);
-	float signy = sign(s.y);
-	float signx = sign(s.x);
-	float theta;
-	if(signy > 0 && signx > 0)
-		theta = asin(s.y);
-	else if(signy > 0 && signx < 0)
-		theta = pi - asin(s.y);
-	else if(signy < 0 && signx < 0)
-		theta = pi - asin(s.y);
-	else if(signy < 0 && signx < 0)
-		theta = 2 * pi + asin(s.y);
-
-	return theta;
 }
 
 void main(void)

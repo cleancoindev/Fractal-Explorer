@@ -6,18 +6,21 @@ using namespace std;
 using namespace GLMath;
 
 OpenGL gl;
-static unsigned int tick = 0;
-static float zoomLog = 0;
-static float maxIterations = 128;
-static float camSpeedSlow = 0.4;
-static float camSpeed = 0.8;
+unsigned int tick = 0;
+float zoomLog = 0;
+float maxIterations = 128;
+float camSpeedSlow = 0.4;
+float camSpeed = 0.8;
 unsigned int KEYS = 0;
+bool autoScroll = false;
 
 mat4 viewMatrix = Identity();
 
 inline void MoveCam()
 {
 	gl.Position += gl.Velocity * camSpeed * exp(zoomLog) * gl.DeltaTime();
+	if(autoScroll)
+		zoomLog -= 1 * gl.DeltaTime();
 }
 
 void Display()
@@ -47,6 +50,15 @@ void Display()
 void Keyboard(unsigned char key, int x, int y)
 {
 	camSpeed = (glutGetModifiers() & GLUT_ACTIVE_SHIFT) > 0 ? 0.4 : 0.8;
+	if(!autoScroll && (key == 'z' || key == 'Z'))
+	{
+		autoScroll = true;
+	}
+	else
+	{
+		autoScroll = false;
+	}
+
 	switch (key)
 	{
 		case 'r': case 'R':

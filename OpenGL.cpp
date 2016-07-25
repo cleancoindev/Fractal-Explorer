@@ -6,13 +6,9 @@
 #include <SOIL/SOIL.h>
 #include <string.h>
 
-//const char* IMAGE_FILE = "full_saturation_spectrum.png";
-//const char* IMAGE_FILE = "yellow_pattern.png";
-//const char* IMAGE_FILE = "deep_sea.png";
-//const char* IMAGE_FILE = "balls.png";
+const char* IMAGE_FILE = "image.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
-const char* IMAGE_FILE = "doge.png";
-
+//const char* IMAGE_FILE = "yellow_pattern.png";
 
 OpenGL::OpenGL()
 {
