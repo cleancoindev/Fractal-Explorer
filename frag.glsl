@@ -1,4 +1,4 @@
-#version 400
+#version 420
 in vec4 exColour;
 in vec2 exTexCoord;
 out vec4 outColour;
@@ -22,6 +22,11 @@ vec2 multInv(vec2 s)
         return vec2(s.x, -s.y)/dot(s, s);
 }
 
+vec2 multC(vec2 a, vec2 b)
+{
+        return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
+}
+
 vec2 sinc(vec2 z)
 {
 	// z = a + bi
@@ -35,24 +40,20 @@ vec2 expc(vec2 z){return powc(e, z);}
 float GetAngle(vec2 s)
 {
 	s /= length(s);
-	float signy = sign(s.y);
-	float signx = sign(s.x);
 	float theta;
-	if(signy > 0 && signx > 0)
-		theta = asin(s.y);
-	else if(signy > 0 && signx < 0)
-		theta = pi - asin(s.y);
-	else if(signy < 0 && signx < 0)
-		theta = pi - asin(s.y);
-	else if(signy < 0 && signx > 0)
-		theta = 2 * pi + asin(s.y);
+	if(s.y >= 0 && s.x >= 0)
+		return asin(s.y);
+	else if(s.x < 0)
+		return pi - asin(s.y);
+	else
+		return (2 * pi) + asin(s.y);
 
-	return theta;
+	return 0;
 }
 
 vec2 f(vec2 t)
 {
-	vec2 r = t;
+	vec2 r = vec2(t.x, t.y);
 
 	// e^t = e^t.x * e^t.yi = e^t.x(cos(t.y) + isin(t.y))
 	//r = exp(r.x)*vec2(cos(r.y), sin(r.y));
@@ -71,30 +72,44 @@ vec2 f(vec2 t)
 
 	/*//
 	// Mandelbrot
-	float i = 0.0f;
+	float j = 0.0f;
 	vec2 c = r;
 	vec2 z = vec2(0,0);
-	while (i < maxIterations)
+	while (j < maxIterations)
 	{
 		z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
-		float t = dot(z, z);
-		if(t > 2.0f)
+		if(dot(z, z) > 2.0f)
 		{
-			return vec2(1 - i/maxIterations, 0);
+			return vec2(1 - j/maxIterations, 0);
 		}
-	    i += 1;
+		j += 1;
 	}
 	r = vec2(0, 0);//*/
+
+	// Poles
+	vec2 p0 = vec2(1,1), p1 = vec2(-1,5);
+	r = multC(multInv(t - p0), multInv(t - p1));
+	r = multC(r, multInv(t - vec2(-6,5)));
 
 	// e^sin(z)
         //r = expc(sinc(t));
 
+	//r = sinc(t);
 	// drip-drip
-	//r = vec2(sin(length(t-vec2(5, 0))), cos(length(t-vec2(-5, 0))));
+	//r = vec2(sin(length(r-vec2(5, 0))), cos(length(r-vec2(-5, 0))));
 
-	//r = vec2(1/length(t), GetAngle(t));
+        /*// Spiral
+        float theta = GetAngle(t);
+        float logLen = log(length(t));
+        r = vec2(10*theta/(2*pi) + logLen, logLen - 10*theta/(2*pi));//*/
 
-        r = expc(vec2(10*GetAngle(t)/(2*pi) + log(length(t)), log(length(t)) - 10*GetAngle(t)/(2*pi)));
+        //sqrt
+        //r = vec2(log(abs(t.x + (t.y*t.y)/(4*t.x))), log(abs((t.y/2)*log(abs(t.x)) - t.y)));
+
+	//spiral2
+        //r = vec2(8*GetAngle(t)/(2*pi), log(length(t)));
+
+        //r = vec2(t.x + t.y*t.y/(2*abs(t.x)*log(abs(t.x))), t.y - t.y*log(abs(log(abs(t.x)))));
 
 	return r;
 }
@@ -103,9 +118,8 @@ void main(void)
 {
 	vec2 texCoord = f(exTexCoord);
 
-	outColour = texture(texSample, texCoord);
+	//outColour = texture(texSample, texCoord);
 
 	// Domain colouring
-	//(log(length(texCoord)) - floor(log(length(texCoord)))) *
-	//outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), length(texCoord)));
+	outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.5))/log(3+length(texCoord));
 }

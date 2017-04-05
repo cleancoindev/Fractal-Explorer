@@ -13,14 +13,19 @@ float camSpeedSlow = 0.4;
 float camSpeed = 0.8;
 unsigned int KEYS = 0;
 bool autoScroll = false;
-
+float3 homePos(0, 0, -1);
 mat4 viewMatrix = Identity();
 
 inline void MoveCam()
 {
 	gl.Position += gl.Velocity * camSpeed * exp(zoomLog) * gl.DeltaTime();
 	if(autoScroll)
+	{
 		zoomLog -= 1 * gl.DeltaTime();
+
+		if(zoomLog < -37.5)
+			zoomLog = 0;
+	}
 }
 
 void Display()
@@ -39,7 +44,7 @@ void Display()
 	glutSwapBuffers();
 	glutPostRedisplay();
 
-	if(tick % 1500 == 0)
+	if(tick / gl.FramesPerSecond() > 5)
 	{
 		cout << gl.FramesPerSecond() << endl;
 		tick = 0;
@@ -63,6 +68,10 @@ void Keyboard(unsigned char key, int x, int y)
 	{
 		case 'r': case 'R':
 			gl.Wireframe();
+			break;
+		case 'h': case 'H':
+			zoomLog = 0;
+			gl.Position = homePos;
 			break;
 		case 'f': case 'F':
 			gl.Fullscreen();
@@ -139,6 +148,8 @@ void KeyboardUp(unsigned char key, int x, int y)
 
 void MouseWheel(int button, int state, int x, int y)
 {
+	autoScroll = false;
+
 	if(button == 3 || button == 4)
 	{
 		if(state == GLUT_UP)

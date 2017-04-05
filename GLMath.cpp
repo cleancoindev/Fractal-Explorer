@@ -1,12 +1,12 @@
 #include "GLMath.h"
 #include <cmath>
 
-float3 GLMath::Cross(float3 a, float3 b)
+float3 GLMath::Cross(const float3& a, const float3& b)
 {
 	return float3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
-float GLMath::Dot(float3 a, float3 b)
+float GLMath::Dot(const float3& a, const float3& b)
 {
 	return a.x*b.x + a.y*b.y + a.z*b.z;
 }
@@ -106,7 +106,7 @@ mat4 GLMath::Identity()
 	return ident;
 }
 
-mat4 GLMath::Inverse(mat4 M)
+mat4 GLMath::Inverse(const mat4& M)
 {
 	float* m;
 	m = (float*)(&M.p[0]);
@@ -133,7 +133,7 @@ mat4 GLMath::Inverse(mat4 M)
 	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
 
 	if(det == 0)
-	    Identity();
+	    return Identity();
 
 	det = 1.f / det;
 

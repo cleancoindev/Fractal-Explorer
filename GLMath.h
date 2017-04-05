@@ -5,8 +5,8 @@
 
 namespace GLMath
 {
-	float3 Cross(float3 a, float3 b);
-	float Dot(float3 a, float3 b);
+	float3 Cross(const float3& a, const float3& b);
+	float Dot(const float3& a, const float3& b);
 
 	mat4 Rotate(const Quaternion& q);
   	mat4 Translate(const float3& n);
@@ -14,5 +14,5 @@ namespace GLMath
   	mat4 Scale(float x, float y, float z);
   	mat4 Perspective(float fov, float ratio, float nearZ, float farZ);
   	mat4 Identity();
-	mat4 Inverse(mat4 M);
+	mat4 Inverse(const mat4& M);
 }

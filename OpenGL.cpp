@@ -6,9 +6,14 @@
 #include <SOIL/SOIL.h>
 #include <string.h>
 
-const char* IMAGE_FILE = "image.png";
+//const char* IMAGE_FILE = "balls.png";
+//const char* IMAGE_FILE = "awesome.bmp";
+//const char* IMAGE_FILE = "image.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
 //const char* IMAGE_FILE = "yellow_pattern.png";
+//const char* IMAGE_FILE = "fire.png";
+const char* IMAGE_FILE = "full_saturation_spectrum.png";
+//const char* IMAGE_FILE = "spectrum.png";
 
 OpenGL::OpenGL()
 {
@@ -53,15 +58,16 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 {
 	filling = true;
 	fullscreen = false;
-	Position = 0.0f;
+	//Position = float3(1.570796327, 0, 0);
+	Position = float3(0, 0, 0);
 	Rotation = 0.0f;
 	Velocity = 0.0f;
-	framesPerSecond = 0.0f;
+	framesPerSecond = 60.0f;						// not the worst guess
 	deltaTime = 0.0f;
 
 	// FREEGLUT
 	glutInit(&argc, argv);
-	glutInitContextVersion(4, 0);
+	glutInitContextVersion(4, 2);
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);

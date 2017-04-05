@@ -1,4 +1,4 @@
-#version 400
+#version 420
 in vec3 position;
 
 layout(location=0) in vec4 inPosition;
