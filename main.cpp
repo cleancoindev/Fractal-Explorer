@@ -11,6 +11,7 @@ float zoomLog = 0;
 float maxIterations = 128;
 float camSpeedSlow = 0.4;
 float camSpeed = 0.8;
+const float autoZoomSpeed = 0.10f;
 unsigned int KEYS = 0;
 bool autoScroll = false;
 float3 homePos(0, 0, -1);
@@ -21,9 +22,9 @@ inline void MoveCam()
 	gl.Position += gl.Velocity * camSpeed * exp(zoomLog) * gl.DeltaTime();
 	if(autoScroll)
 	{
-		zoomLog -= 1 * gl.DeltaTime();
+		zoomLog -= autoZoomSpeed * gl.DeltaTime();
 
-		if(zoomLog < -37.5)
+		if(zoomLog < -12.0f)
 			zoomLog = 0;
 	}
 }

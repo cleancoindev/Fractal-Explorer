@@ -10,10 +10,11 @@
 //const char* IMAGE_FILE = "awesome.bmp";
 //const char* IMAGE_FILE = "image.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
-//const char* IMAGE_FILE = "yellow_pattern.png";
+const char* IMAGE_FILE = "yellow_pattern.png";
 //const char* IMAGE_FILE = "fire.png";
-const char* IMAGE_FILE = "full_saturation_spectrum.png";
+//const char* IMAGE_FILE = "full_saturation_spectrum.png";
 //const char* IMAGE_FILE = "spectrum.png";
+//const char* IMAGE_FILE = "deep_sea.png";
 
 OpenGL::OpenGL()
 {

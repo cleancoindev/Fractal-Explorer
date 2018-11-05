@@ -70,11 +70,15 @@ vec2 f(vec2 t)
 	}
 	r = x;//*/
 
-	/*//
+	//*//
 	// Mandelbrot
 	float j = 0.0f;
-	vec2 c = r;
-	vec2 z = vec2(0,0);
+        vec2 mandel = r;
+	vec2 julia_0 = vec2(0.285, 0.01);
+	vec2 julia_1 = vec2(-0.8, 0.156);
+	vec2 julia_2 = vec2(-0.4, 0.6);
+	vec2 c = julia_0;
+	vec2 z = r;
 	while (j < maxIterations)
 	{
 		z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
@@ -87,9 +91,9 @@ vec2 f(vec2 t)
 	r = vec2(0, 0);//*/
 
 	// Poles
-	vec2 p0 = vec2(1,1), p1 = vec2(-1,5);
-	r = multC(multInv(t - p0), multInv(t - p1));
-	r = multC(r, multInv(t - vec2(-6,5)));
+	//vec2 p0 = vec2(1,1), p1 = vec2(-1,5);
+	//r = multC(multInv(t - p0), multInv(t - p1));
+	//r = multC(r, multInv(t - vec2(-6,5)));
 
 	// e^sin(z)
         //r = expc(sinc(t));
@@ -118,8 +122,8 @@ void main(void)
 {
 	vec2 texCoord = f(exTexCoord);
 
-	//outColour = texture(texSample, texCoord);
+	outColour = texture(texSample, texCoord);
 
 	// Domain colouring
-	outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.5))/log(3+length(texCoord));
+	//outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.5))/log(3+length(texCoord));
 }
