@@ -6,7 +6,6 @@
 #include <string>
 
 #include "GLMath.h"
-//#include "Objects.h"
 
 
 class OpenGL
@@ -19,7 +18,6 @@ private:
 	unsigned int currentTime, previousTime, elapsedTime;
 	float deltaTime;
 	bool filling, fullscreen;
-	//std::vector<std::shared_ptr<Object3D>> objects;
 
 public:
 	float3 Position;
@@ -32,17 +30,12 @@ public:
 
 	void GLInit(int argc, char** argv, int width, int height, const std::string& title);
   	void Cleanup();
+  void Draw();
 	void CalcFPS();
   	void StartFPS();
 	void Fullscreen();
-  	void Wireframe();
+  void Wireframe();
 	void SaveScreenshot(const std::string& filename);
-
-	/*std::shared_ptr<Object3D> AddObject(int Verts, int Inds, int Mode);
-	std::shared_ptr<Object3D> AddCube();
-	std::shared_ptr<Object3D> AddSphere(unsigned int n, float radius);
-	std::shared_ptr<Object3D> AddLine();
-	std::shared_ptr<Object3D> AddPlane();*/
 
 	float FramesPerSecond() const;
 	GLuint WindowId() const;

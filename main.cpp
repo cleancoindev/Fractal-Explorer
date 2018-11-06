@@ -40,7 +40,7 @@ void Display()
 	GLuint maxItersId = glGetUniformLocation(gl.ProgramId(), "maxIterations");
 	glUniformMatrix4fv(viewMatrixId, 1, GL_FALSE, &viewMatrix.p[0][0]);
 	glUniform1f(maxItersId, maxIterations);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr);
+	gl.Draw();
 
 	glutSwapBuffers();
 	glutPostRedisplay();

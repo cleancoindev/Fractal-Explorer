@@ -10,8 +10,8 @@
 //const char* IMAGE_FILE = "awesome.bmp";
 //const char* IMAGE_FILE = "image.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
-const char* IMAGE_FILE = "yellow_pattern.png";
-//const char* IMAGE_FILE = "fire.png";
+//const char* IMAGE_FILE = "yellow_pattern.png";
+const char* IMAGE_FILE = "fire.png";
 //const char* IMAGE_FILE = "full_saturation_spectrum.png";
 //const char* IMAGE_FILE = "spectrum.png";
 //const char* IMAGE_FILE = "deep_sea.png";
@@ -157,8 +157,12 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 
 	// GL
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	int fbWidth, fbHeight;
-	glViewport(0, 0, fbWidth, fbHeight);
+	glViewport(0, 0, width, height);
+}
+
+void OpenGL::Draw()
+{
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, nullptr);
 }
 
 void OpenGL::CalcFPS()
@@ -198,9 +202,26 @@ void OpenGL::SaveScreenshot(const std::string& filename)
 	glReadBuffer(GL_FRONT);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-	const int width = Width();
-	const int height = Height();
+    // Render to Framebuffer 4X current size
+    const int magnifyFactor = 4;
+	const int width = Width() * magnifyFactor;
+	const int height = Height() * magnifyFactor;
+	GLuint fboId, renderBuffer;
+	glGenFramebuffers(1, &fboId);
+	glGenRenderbuffers(1, &renderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB8, width, height);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboId);
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboId);
+
+	glViewport(0, 0, width, height);
+	this->Draw();
+
 	unsigned char* img = new unsigned char[width * height * 3];
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboId);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, img);
 	unsigned char* swapSpace = new unsigned char[width * height * 3];
 	const int bytesPerRow = width * 3;
@@ -217,39 +238,18 @@ void OpenGL::SaveScreenshot(const std::string& filename)
 	{
 		std::cerr << "SaveScreenshot succeeded\n";
 	}
+
+    // Delete image array data
 	delete[] img;
 	delete[] swapSpace;
-}
 
-/*Object3D* OpenGL::AddObject(int Verts, int Inds, int Mode)
-{
-	Objects.push_back(new Object3D(Verts, Inds, Mode));
-	return Objects[Objects.size() - 1];
-}
+	// Delete FBO data
+	glDeleteFramebuffers(1, &fboId);
+	glDeleteRenderbuffers(1, &renderBuffer);
 
-Object3D* OpenGL::AddCube()
-{
-	Objects.push_back(new CubeObj());
-	return Objects[Objects.size() - 1];
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, width/magnifyFactor, height/magnifyFactor);
 }
-
-Object3D* OpenGL::AddSphere(unsigned int n, float radius)
-{
-	Objects.push_back(new SphereObj(n, radius));
-	return Objects[Objects.size() - 1];
-}
-
-Object3D* OpenGL::AddLine()
-{
-	Objects.push_back(new LineObj());
-	return Objects[Objects.size() - 1];
-}
-
-Object3D* OpenGL::AddPlane()
-{
-	Objects.push_back(new PlaneObj());
-	return Objects[Objects.size() - 1];
-}*/
 
 float OpenGL::FramesPerSecond() const
 {
