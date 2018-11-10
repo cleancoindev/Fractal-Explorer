@@ -11,8 +11,8 @@
 //const char* IMAGE_FILE = "image.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
 //const char* IMAGE_FILE = "yellow_pattern.png";
-const char* IMAGE_FILE = "fire.png";
-//const char* IMAGE_FILE = "full_saturation_spectrum.png";
+//const char* IMAGE_FILE = "fire.png";
+const char* IMAGE_FILE = "full_saturation_spectrum.png";
 //const char* IMAGE_FILE = "spectrum.png";
 //const char* IMAGE_FILE = "deep_sea.png";
 
@@ -40,7 +40,6 @@ OpenGL::~OpenGL()
 	glDeleteProgram(programId);
 
 	// VBO Cleanup
-	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 
@@ -59,12 +58,10 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 {
 	filling = true;
 	fullscreen = false;
-	//Position = float3(1.570796327, 0, 0);
-	Position = float3(0, 0, 0);
-	Rotation = 0.0f;
-	Velocity = 0.0f;
-	framesPerSecond = 60.0f;						// not the worst guess
-	deltaTime = 0.0f;
+	Position = float3(0);
+	Velocity = float3(0);
+	framesPerSecond = 60.0;						// not the worst guess
+	deltaTime = 0.0;
 
 	// FREEGLUT
 	glutInit(&argc, argv);
@@ -90,24 +87,17 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	}
 
 	GLfloat vertices[] = {
-		-1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, -1.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 1.0f
-	};
-
-	GLfloat colours[] = {
-		0.0f, 1.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 1.0f, 1.0f
+		-1.0, 1.0, 0.0, 1.0,
+		1.0, 1.0, 0.0, 1.0,
+		1.0, -1.0, 0.0, 1.0,
+		-1.0, -1.0, 0.0, 1.0
 	};
 
 	GLfloat texCoords[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f,
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
 	};
 
 	GLubyte indices[] = {
@@ -126,12 +116,6 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 0 set to vert4 vertices
 	glEnableVertexAttribArray(0);
-
-	glGenBuffers(1, &colourBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, colourBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colours), colours, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 1 set to vert4 colours
-	glEnableVertexAttribArray(1);
 
 	glGenBuffers(1, &indexBufferId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId);
@@ -152,8 +136,8 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 2 set to vert2 texture coordinates
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 2 set to vert2 texture coordinates
+	glEnableVertexAttribArray(1);
 
 	// GL
 	glClearColor(0.0, 0.0, 0.0, 1.0);

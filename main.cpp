@@ -3,19 +3,26 @@
 #include <cmath>
 
 using namespace std;
-using namespace GLMath;
 
+// Constants
+const float camSpeedSlow = 0.4;
+const float camSpeedNorm = 0.8;
+const float autoZoomSpeed = 0.50f;
+const float3 homePos(0, 0, -1);
+
+// GL
 OpenGL gl;
 unsigned int tick = 0;
-float zoomLog = 0;
 float maxIterations = 128;
-float camSpeedSlow = 0.4;
+
+// Camera
 float camSpeed = 0.8;
-const float autoZoomSpeed = 0.10f;
+float zoomLog = 0;
+mat4 viewMatrix = GLMath::Identity();
+
+// Movement
 unsigned int KEYS = 0;
 bool autoScroll = false;
-float3 homePos(0, 0, -1);
-mat4 viewMatrix = Identity();
 
 inline void MoveCam()
 {
@@ -35,7 +42,7 @@ void Display()
 	gl.CalcFPS();
 
 	MoveCam();
-	viewMatrix = Translate(gl.Position) * Scale(exp(zoomLog) * gl.Width()/gl.Height(), exp(zoomLog), 1);
+	viewMatrix = GLMath::Translate(gl.Position) * GLMath::Scale(exp(zoomLog) * gl.Width()/gl.Height(), exp(zoomLog), 1);
 	GLuint viewMatrixId = glGetUniformLocation(gl.ProgramId(), "viewMatrix");
 	GLuint maxItersId = glGetUniformLocation(gl.ProgramId(), "maxIterations");
 	glUniformMatrix4fv(viewMatrixId, 1, GL_FALSE, &viewMatrix.p[0][0]);
@@ -55,7 +62,7 @@ void Display()
 
 void Keyboard(unsigned char key, int x, int y)
 {
-	camSpeed = (glutGetModifiers() & GLUT_ACTIVE_SHIFT) > 0 ? 0.4 : 0.8;
+	camSpeed = (glutGetModifiers() & GLUT_ACTIVE_SHIFT) > 0 ? camSpeedSlow : camSpeedNorm;
 	if(!autoScroll && (key == 'z' || key == 'Z'))
 	{
 		autoScroll = true;

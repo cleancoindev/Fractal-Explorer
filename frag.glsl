@@ -12,19 +12,19 @@ uniform float maxIterations;
 
 vec2 powc(float x, vec2 s)
 {
-        // x^s = e^(log(x)s) = e^(log(x)Re(s) + log(x)Im(s)i) = x^Re(s) * (cos(log(x)Im(s)) + sin(log(x)Im(s))i)
-        float theta = log(x) * s.y;
-        return pow(x, s.x) * vec2(cos(theta), sin(theta));
+	// x^s = e^(log(x)s) = e^(log(x)Re(s) + log(x)Im(s)i) = x^Re(s) * (cos(log(x)Im(s)) + sin(log(x)Im(s))i)
+	float theta = log(x) * s.y;
+	return pow(x, s.x) * vec2(cos(theta), sin(theta));
 }
 
 vec2 multInv(vec2 s)
 {
-        return vec2(s.x, -s.y)/dot(s, s);
+	return vec2(s.x, -s.y)/dot(s, s);
 }
 
 vec2 multC(vec2 a, vec2 b)
 {
-        return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
+	return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
 }
 
 vec2 sinc(vec2 z)
@@ -64,7 +64,6 @@ vec2 f(vec2 t)
 	vec2 x = vec2(0,0);
 	while (i < maxIterations)
 	{
-
 		x += multInv(powc(i, r));
 		i += 1;
 	}
@@ -73,16 +72,16 @@ vec2 f(vec2 t)
 	//*//
 	// Mandelbrot
 	float j = 0.0f;
-        vec2 mandel = r;
-	vec2 julia_0 = vec2(0.285, 0.01);
-	vec2 julia_1 = vec2(-0.8, 0.156);
-	vec2 julia_2 = vec2(-0.4, 0.6);
-	vec2 c = julia_0;
-	vec2 z = r;
+	dvec2 mandel = dvec2(r.x, r.y);
+	dvec2 julia_0 = dvec2(0.285, 0.01);
+	dvec2 julia_1 = dvec2(-0.8, 0.156);
+	dvec2 julia_2 = dvec2(-0.4, 0.6);
+	dvec2 c = julia_2;	// Fractal type
+	dvec2 z = dvec2(r.x, r.y);
 	while (j < maxIterations)
 	{
-		z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
-		if(dot(z, z) > 2.0f)
+		z = dvec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
+		if(dot(z, z) > 2.0)
 		{
 			return vec2(1 - j/maxIterations, 0);
 		}
@@ -96,24 +95,26 @@ vec2 f(vec2 t)
 	//r = multC(r, multInv(t - vec2(-6,5)));
 
 	// e^sin(z)
-        //r = expc(sinc(t));
+	//r = expc(sinc(t));
 
+	// Complex sin
 	//r = sinc(t);
+
 	// drip-drip
 	//r = vec2(sin(length(r-vec2(5, 0))), cos(length(r-vec2(-5, 0))));
 
-        /*// Spiral
-        float theta = GetAngle(t);
-        float logLen = log(length(t));
-        r = vec2(10*theta/(2*pi) + logLen, logLen - 10*theta/(2*pi));//*/
+	/*// Spiral
+	float theta = GetAngle(t);
+	float logLen = log(length(t));
+	r = vec2(10*theta/(2*pi) + logLen, logLen - 10*theta/(2*pi));//*/
 
-        //sqrt
-        //r = vec2(log(abs(t.x + (t.y*t.y)/(4*t.x))), log(abs((t.y/2)*log(abs(t.x)) - t.y)));
+	//sqrt
+	//r = vec2(log(abs(t.x + (t.y*t.y)/(4*t.x))), log(abs((t.y/2)*log(abs(t.x)) - t.y)));
 
 	//spiral2
-        //r = vec2(8*GetAngle(t)/(2*pi), log(length(t)));
+	//r = vec2(8*GetAngle(t)/(2*pi), log(length(t)));
 
-        //r = vec2(t.x + t.y*t.y/(2*abs(t.x)*log(abs(t.x))), t.y - t.y*log(abs(log(abs(t.x)))));
+	//r = vec2(t.x + t.y*t.y/(2*abs(t.x)*log(abs(t.x))), t.y - t.y*log(abs(log(abs(t.x)))));
 
 	return r;
 }
@@ -121,9 +122,8 @@ vec2 f(vec2 t)
 void main(void)
 {
 	vec2 texCoord = f(exTexCoord);
-
 	outColour = texture(texSample, texCoord);
 
 	// Domain colouring
-	//outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.5))/log(3+length(texCoord));
+	//outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.1))*(sin(length(texCoord)) + 0.25);
 }

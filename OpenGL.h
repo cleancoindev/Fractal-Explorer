@@ -21,20 +21,19 @@ private:
 
 public:
 	float3 Position;
-	float3 Rotation;
 	float3 Velocity;
 
 	OpenGL();
 	OpenGL(int argc, char** argv, int width, int height, const std::string& title);
-  	~OpenGL();
+	~OpenGL();
 
 	void GLInit(int argc, char** argv, int width, int height, const std::string& title);
-  	void Cleanup();
-  void Draw();
+	void Cleanup();
+	void Draw();
 	void CalcFPS();
-  	void StartFPS();
+	void StartFPS();
 	void Fullscreen();
-  void Wireframe();
+	void Wireframe();
 	void SaveScreenshot(const std::string& filename);
 
 	float FramesPerSecond() const;
@@ -42,5 +41,5 @@ public:
 	GLuint ProgramId() const;
 	float DeltaTime() const;
 	int Width() const;
-  	int Height() const;
+	int Height() const;
 };

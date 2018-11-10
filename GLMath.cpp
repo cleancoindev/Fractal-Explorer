@@ -95,13 +95,9 @@ mat4 GLMath::Perspective(float fov, float ratio, float nearZ, float farZ)
 mat4 GLMath::Identity()
 {
 	mat4 ident(0.0);
-	for(int col = 0; col < 4; col++)
+	for(int i = 0; i < 4; i++)
 	{
-		for(int row = 0; row < 4; row++)
-		{
-			if((col*4 + row) % 5 == 0)
-				ident.p[col][row] = 1;
-		}
+		ident.p[i][i] = 1;
 	}
 	return ident;
 }
