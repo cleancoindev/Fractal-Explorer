@@ -5,10 +5,11 @@
 using namespace std;
 
 // Constants
-const float camSpeedSlow = 0.4;
-const float camSpeedNorm = 0.8;
-const float autoZoomSpeed = 0.50f;
-const float3 homePos(0, 0, -1);
+const double camSpeedSlow = 0.4;
+const double camSpeedNorm = 0.8;
+const double autoZoomSpeed = 0.50f;
+const double autoZoomMax = 30.0f;
+const double3 homePos(0, 0, -1);
 
 // GL
 OpenGL gl;
@@ -16,9 +17,9 @@ unsigned int tick = 0;
 float maxIterations = 128;
 
 // Camera
-float camSpeed = 0.8;
-float zoomLog = 0;
-mat4 viewMatrix = GLMath::Identity();
+double camSpeed = 0.2;
+double zoomLog = 0;
+dmat4 viewMatrix = GLMathDouble::Identity();
 
 // Movement
 unsigned int KEYS = 0;
@@ -31,7 +32,7 @@ inline void MoveCam()
 	{
 		zoomLog -= autoZoomSpeed * gl.DeltaTime();
 
-		if(zoomLog < -12.0f)
+		if(zoomLog < -autoZoomMax)
 			zoomLog = 0;
 	}
 }
@@ -42,10 +43,10 @@ void Display()
 	gl.CalcFPS();
 
 	MoveCam();
-	viewMatrix = GLMath::Translate(gl.Position) * GLMath::Scale(exp(zoomLog) * gl.Width()/gl.Height(), exp(zoomLog), 1);
+	viewMatrix = GLMathDouble::Translate(gl.Position) * GLMathDouble::Scale(exp(zoomLog) * gl.Width()/gl.Height(), exp(zoomLog), 1);
 	GLuint viewMatrixId = glGetUniformLocation(gl.ProgramId(), "viewMatrix");
 	GLuint maxItersId = glGetUniformLocation(gl.ProgramId(), "maxIterations");
-	glUniformMatrix4fv(viewMatrixId, 1, GL_FALSE, &viewMatrix.p[0][0]);
+	glUniformMatrix4dv(viewMatrixId, 1, GL_FALSE, &viewMatrix.p[0][0]);
 	glUniform1f(maxItersId, maxIterations);
 	gl.Draw();
 
@@ -163,7 +164,7 @@ void MouseWheel(int button, int state, int x, int y)
 		if(state == GLUT_UP)
 			return;
 
-		float zoomSpeed = (glutGetModifiers() & GLUT_ACTIVE_SHIFT) > 0 ? 0.01 : 0.1;
+		double zoomSpeed = (glutGetModifiers() & GLUT_ACTIVE_SHIFT) > 0 ? 0.01 : 0.1;
 		// Scroll up
 		if(button == 3)
 			zoomLog -= zoomSpeed;

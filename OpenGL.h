@@ -14,14 +14,14 @@ private:
 	GLuint windowId;
 	GLuint programId, fragmentShaderId, vertexShaderId, vaoId, vboId, colourBufferId, indexBufferId, textureId, texBufferId;
 	unsigned int frameCount;
-	float framesPerSecond;
+	double framesPerSecond;
 	unsigned int currentTime, previousTime, elapsedTime;
-	float deltaTime;
+	double deltaTime;
 	bool filling, fullscreen;
 
 public:
-	float3 Position;
-	float3 Velocity;
+	double3 Position;
+	double3 Velocity;
 
 	OpenGL();
 	OpenGL(int argc, char** argv, int width, int height, const std::string& title);
@@ -36,10 +36,10 @@ public:
 	void Wireframe();
 	void SaveScreenshot(const std::string& filename);
 
-	float FramesPerSecond() const;
+	double FramesPerSecond() const;
 	GLuint WindowId() const;
 	GLuint ProgramId() const;
-	float DeltaTime() const;
+	double DeltaTime() const;
 	int Width() const;
 	int Height() const;
 };

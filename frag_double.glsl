@@ -1,6 +1,5 @@
 #version 420
-in vec4 exColour;
-in vec2 exTexCoord;
+in vec4 unmodifiedPos;
 out vec4 outColour;
 
 uniform sampler2D texSample;
@@ -8,7 +7,9 @@ uniform sampler2D texSample;
 float pi = 3.14159265358f;
 float e = 2.718281828;
 float c = 1.0053611;
+
 uniform float maxIterations;
+uniform dmat4 viewMatrix;
 
 vec2 powc(float x, vec2 s)
 {
@@ -51,9 +52,9 @@ float GetAngle(vec2 s)
 	return 0;
 }
 
-vec2 f(vec2 t)
+vec2 f(dvec2 t)
 {
-	vec2 r = vec2(t.x, t.y);
+	dvec2 r = dvec2(t.x, t.y);
 
 	// e^t = e^t.x * e^t.yi = e^t.x(cos(t.y) + isin(t.y))
 	//r = exp(r.x)*vec2(cos(r.y), sin(r.y));
@@ -72,15 +73,15 @@ vec2 f(vec2 t)
 	//*//
 	// Mandelbrot
 	float j = 0.0f;
-	vec2 mandel = r;
-	vec2 julia_0 = vec2(0.285, 0.01);
-	vec2 julia_1 = vec2(-0.8, 0.156);
-	vec2 julia_2 = vec2(-0.4, 0.6);
-	vec2 c = julia_2;	// Fractal type
-	vec2 z = vec2(r.x, r.y);
+	dvec2 mandel = t;
+	dvec2 julia_0 = dvec2(0.285, 0.01);
+	dvec2 julia_1 = dvec2(-0.8, 0.156);
+	dvec2 julia_2 = dvec2(-0.4, 0.6);
+	dvec2 c = mandel;	// Fractal type
+	dvec2 z = dvec2(r.x, r.y);
 	while (j < maxIterations)
 	{
-		z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
+		z = dvec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
 		if(dot(z, z) > 2.0)
 		{
 			return vec2(1 - j/maxIterations, 0);
@@ -116,11 +117,13 @@ vec2 f(vec2 t)
 
 	//r = vec2(t.x + t.y*t.y/(2*abs(t.x)*log(abs(t.x))), t.y - t.y*log(abs(log(abs(t.x)))));
 
-	return r;
+	return vec2(r.x, r.y);
 }
 
 void main(void)
 {
+	dvec4 tmp = viewMatrix * dvec4(unmodifiedPos.x, unmodifiedPos.y, unmodifiedPos.z, unmodifiedPos.w);
+	dvec2 exTexCoord = dvec2(tmp.x, tmp.y);
 	vec2 texCoord = f(exTexCoord);
 	outColour = texture(texSample, texCoord);
 

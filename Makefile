@@ -1,4 +1,4 @@
-OBJECTS=GLMath.o float3.o mat4.o Quaternion.o Shaders.o OpenGL.o
+OBJECTS=GLMath.o float3.o double3.o mat4.o dmat4.o Quaternion.o Shaders.o OpenGL.o
 OUT=test
 
 make: main.cpp $(OBJECTS)
@@ -17,8 +17,14 @@ GLMath.o: GLMath.cpp
 float3.o: float3.cpp
 	g++ -c -o float3.o --std=c++11 -O2 float3.cpp
 
+double3.o: double3.cpp
+	g++ -c -o double3.o --std=c++11 -O2 double3.cpp
+
 mat4.o: mat4.cpp
 	g++ -c -o mat4.o --std=c++11 -O2 mat4.cpp
+
+dmat4.o: dmat4.cpp
+	g++ -c -o dmat4.o --std=c++11 -O2 dmat4.cpp
 
 Quaternion.o: Quaternion.cpp
 	g++ -c -o Quaternion.o --std=c++11 -O2 Quaternion.cpp

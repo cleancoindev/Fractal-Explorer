@@ -58,8 +58,8 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 {
 	filling = true;
 	fullscreen = false;
-	Position = float3(0);
-	Velocity = float3(0);
+	Position = double3(0);
+	Velocity = double3(0);
 	framesPerSecond = 60.0;						// not the worst guess
 	deltaTime = 0.0;
 
@@ -105,7 +105,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	};
 
 	// Shaders
-	Shaders::SetShaders(&programId, &vertexShaderId, &fragmentShaderId, "vert.glsl", "frag.glsl");
+	Shaders::SetShaders(&programId, &vertexShaderId, &fragmentShaderId, "vert_double.glsl", "frag_double.glsl");
 
 	// VBO (Creating objects)
 	glGenVertexArrays(1, &vaoId);													// One vaoID per Object
@@ -136,7 +136,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 2 set to vert2 texture coordinates
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 1 set to vert2 texture coordinates
 	glEnableVertexAttribArray(1);
 
 	// GL
@@ -235,7 +235,7 @@ void OpenGL::SaveScreenshot(const std::string& filename)
 	glViewport(0, 0, width/magnifyFactor, height/magnifyFactor);
 }
 
-float OpenGL::FramesPerSecond() const
+double OpenGL::FramesPerSecond() const
 {
 	return framesPerSecond;
 }
@@ -250,7 +250,7 @@ GLuint OpenGL::WindowId() const
 	return windowId;
 }
 
-float OpenGL::DeltaTime() const
+double OpenGL::DeltaTime() const
 {
 	return deltaTime;
 }
