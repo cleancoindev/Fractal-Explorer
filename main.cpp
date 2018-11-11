@@ -7,8 +7,8 @@ using namespace std;
 // Constants
 const double camSpeedSlow = 0.4;
 const double camSpeedNorm = 0.8;
-const double autoZoomSpeed = 0.50f;
-const double autoZoomMax = 30.0f;
+const double autoZoomSpeed = 0.20f;
+const double autoZoomMax = 32.0f;
 const double3 homePos(0, 0, -1);
 
 // GL
