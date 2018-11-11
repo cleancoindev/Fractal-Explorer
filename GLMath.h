@@ -12,7 +12,6 @@ namespace GLMath
   	mat4 Translate(const float3& n);
 	mat4 Scale(const float3& s);
   	mat4 Scale(float x, float y, float z);
-  	mat4 Perspective(float fov, float ratio, float nearZ, float farZ);
   	mat4 Identity();
 	mat4 Inverse(const mat4& M);
 }

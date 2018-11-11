@@ -75,23 +75,6 @@ mat4 GLMath::Scale(float x, float y, float z)
 	return m;
 }
 
-mat4 GLMath::Perspective(float fov, float ratio, float nearZ, float farZ)
-{
-	float scale = tanf(fov * 0.5 * (3.1415926535 / 180)) * nearZ;
-	float rightX = ratio * scale, leftX = -rightX;
-	float topY = scale, bottomY = -topY;
-
-	mat4 proj(0.0f);
-	proj.p[0][0] = 2 * nearZ / (rightX - leftX);
-	proj.p[1][1] = 2 * nearZ / (topY - bottomY);
-	proj.p[2][0] = (rightX + leftX) / (rightX - leftX);
-	proj.p[2][1] = (topY + bottomY) / (topY - bottomY);
-	proj.p[2][2] = -(farZ + nearZ) / (farZ - nearZ);
-	proj.p[2][3] = -1;
-	proj.p[3][2] = -2 * farZ * nearZ / (farZ - nearZ);
-	return proj;
-}
-
 mat4 GLMath::Identity()
 {
 	mat4 ident(0.0);

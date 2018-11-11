@@ -1,5 +1,4 @@
 #version 420
-in vec4 exColour;
 in vec2 exTexCoord;
 out vec4 outColour;
 
@@ -72,15 +71,15 @@ vec2 f(vec2 t)
 	//*//
 	// Mandelbrot
 	float j = 0.0f;
-	dvec2 mandel = dvec2(r.x, r.y);
-	dvec2 julia_0 = dvec2(0.285, 0.01);
-	dvec2 julia_1 = dvec2(-0.8, 0.156);
-	dvec2 julia_2 = dvec2(-0.4, 0.6);
-	dvec2 c = julia_2;	// Fractal type
-	dvec2 z = dvec2(r.x, r.y);
+	vec2 mandel = r;
+	vec2 julia_0 = vec2(0.285, 0.01);
+	vec2 julia_1 = vec2(-0.8, 0.156);
+	vec2 julia_2 = vec2(-0.4, 0.6);
+	vec2 c = julia_2;	// Fractal type
+	vec2 z = vec2(r.x, r.y);
 	while (j < maxIterations)
 	{
-		z = dvec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
+		z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
 		if(dot(z, z) > 2.0)
 		{
 			return vec2(1 - j/maxIterations, 0);

@@ -136,7 +136,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 2 set to vert2 texture coordinates
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);							//layout location 1 set to vert2 texture coordinates
 	glEnableVertexAttribArray(1);
 
 	// GL
