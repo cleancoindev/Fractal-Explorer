@@ -72,23 +72,28 @@ vec2 f(dvec2 t)
 
 	//*//
 	// Mandelbrot
-	float j = 0.0f;
+	double j = 1.0f;
 	dvec2 mandel = t;
 	dvec2 julia_0 = dvec2(0.285, 0.01);
 	dvec2 julia_1 = dvec2(-0.8, 0.156);
 	dvec2 julia_2 = dvec2(-0.4, 0.6);
+        dvec2 julia_3 = dvec2(-0.835, -0.2321);
 	dvec2 c = mandel;	// Fractal type
 	dvec2 z = dvec2(r.x, r.y);
-	while (j < maxIterations)
+	while (j <= maxIterations)
 	{
 		z = dvec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
 		if(dot(z, z) > 2.0)
 		{
+			//*/
 			return vec2(1 - j/maxIterations, 0);
+			/*/
+			double t = maxIterations/j;
+			return vec2(float(t - floor(t)), 0);//*/
 		}
 		j += 1;
 	}
-	r = vec2(0, 0);//*/
+	return vec2(0, 0);//*/
 
 	// Poles
 	//vec2 p0 = vec2(1,1), p1 = vec2(-1,5);
@@ -99,7 +104,7 @@ vec2 f(dvec2 t)
 	//r = expc(sinc(t));
 
 	// Complex sin
-	//r = sinc(t);
+	//return sinc(vec2(t.x, t.y));
 
 	// drip-drip
 	//r = vec2(sin(length(r-vec2(5, 0))), cos(length(r-vec2(-5, 0))));

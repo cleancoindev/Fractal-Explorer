@@ -27,7 +27,7 @@ public:
 	OpenGL(int argc, char** argv, int width, int height, const std::string& title);
 	~OpenGL();
 
-	void GLInit(int argc, char** argv, int width, int height, const std::string& title);
+	int GLInit(int argc, char** argv, int width, int height, const std::string& title);
 	void Cleanup();
 	void Draw();
 	void CalcFPS();

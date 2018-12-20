@@ -182,7 +182,11 @@ void Resize(int width, int height)
 
 int main(int argc, char** argv)
 {
-	gl.GLInit(argc, argv, 800, 600, "Fractal Explorer");
+	int err = gl.GLInit(argc, argv, 800, 600, "Fractal Explorer");
+	if(err < 0) {
+		return err;
+	}
+
 	glutDisplayFunc(Display);
 	glutIdleFunc(Display);
 	glutKeyboardFunc(Keyboard);
