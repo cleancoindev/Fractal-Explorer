@@ -8,13 +8,14 @@
 
 //const char* IMAGE_FILE = "balls.png";
 //const char* IMAGE_FILE = "awesome.bmp";
-//const char* IMAGE_FILE = "image.png";
+//const char* IMAGE_FILE = "koala.png";
 //const char* IMAGE_FILE = "now-its-personal.png";
 //const char* IMAGE_FILE = "yellow_pattern.png";
 //const char* IMAGE_FILE = "fire.png";
 const char* IMAGE_FILE = "full_saturation_spectrum.png";
 //const char* IMAGE_FILE = "spectrum.png";
 //const char* IMAGE_FILE = "deep_sea.png";
+//const char* IMAGE_FILE = "clowning-around.png";
 
 OpenGL::OpenGL()
 {
@@ -54,12 +55,22 @@ OpenGL::~OpenGL()
 	glDeleteVertexArrays(1, &vaoId);
 }
 
-void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::string& title)
+int OpenGL::GLInit(int argc, char** argv, int width, int height, const std::string& title)
 {
+	const char* imageFile;
+	if(argc == 1) {
+		imageFile = IMAGE_FILE;
+	} else if(argc == 2) {
+		imageFile = argv[1];
+	} else {
+		std::cerr << "Unknown arguments received\n";
+		return -1;
+	}
+
 	filling = true;
 	fullscreen = false;
-	Position = float3(0);
-	Velocity = float3(0);
+	Position = double3(0);
+	Velocity = double3(0);
 	framesPerSecond = 60.0;						// not the worst guess
 	deltaTime = 0.0;
 
@@ -75,7 +86,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	if((windowId = glutCreateWindow(title.c_str())) < 1)
 	{
 		std::cerr << "Failed to create GLUT window\n";
-		return;
+		return -2;
 	}
 
 	// GLEW
@@ -83,7 +94,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	if(glewInit() != GLEW_OK)
 	{
 		std::cerr << "Failed to initialize GLEW\n";
-		return;
+		return -3;
 	}
 
 	GLfloat vertices[] = {
@@ -105,7 +116,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	};
 
 	// Shaders
-	Shaders::SetShaders(&programId, &vertexShaderId, &fragmentShaderId, "vert.glsl", "frag.glsl");
+	Shaders::SetShaders(&programId, &vertexShaderId, &fragmentShaderId, "vert_double.glsl", "frag_double.glsl");
 
 	// VBO (Creating objects)
 	glGenVertexArrays(1, &vaoId);													// One vaoID per Object
@@ -125,7 +136,7 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	glGenTextures(1, &textureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	int imgWidth, imgHeight;
-	unsigned char* image = SOIL_load_image(IMAGE_FILE, &imgWidth, &imgHeight, 0, SOIL_LOAD_RGB);
+	unsigned char* image = SOIL_load_image(imageFile, &imgWidth, &imgHeight, 0, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imgWidth, imgHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
@@ -142,6 +153,8 @@ void OpenGL::GLInit(int argc, char** argv, int width, int height, const std::str
 	// GL
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glViewport(0, 0, width, height);
+
+	return 0;
 }
 
 void OpenGL::Draw()
@@ -186,7 +199,7 @@ void OpenGL::SaveScreenshot(const std::string& filename)
 	glReadBuffer(GL_FRONT);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    // Render to Framebuffer 4X current size
+    // Render to Framebuffer 4X current screen size
     const int magnifyFactor = 4;
 	const int width = Width() * magnifyFactor;
 	const int height = Height() * magnifyFactor;
@@ -235,7 +248,7 @@ void OpenGL::SaveScreenshot(const std::string& filename)
 	glViewport(0, 0, width/magnifyFactor, height/magnifyFactor);
 }
 
-float OpenGL::FramesPerSecond() const
+double OpenGL::FramesPerSecond() const
 {
 	return framesPerSecond;
 }
@@ -250,7 +263,7 @@ GLuint OpenGL::WindowId() const
 	return windowId;
 }
 
-float OpenGL::DeltaTime() const
+double OpenGL::DeltaTime() const
 {
 	return deltaTime;
 }
