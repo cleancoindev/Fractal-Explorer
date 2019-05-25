@@ -1,4 +1,4 @@
-#Fractal Explorer
+# Fractal Explorer
 
 ## About
 A very generic, OpenGL fragment-shader driven program that maps pixel positions in **R**<sup>2</sup> to
