@@ -85,7 +85,7 @@ vec2 f(dvec2 t)
 		z = dvec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
 		if(dot(z, z) > 2.0)
 		{
-			//*/
+			/*/
 			return vec2(1 - j/maxIterations, 0);
 			/*/
 			double t = maxIterations/j;
@@ -131,7 +131,4 @@ void main(void)
 	dvec2 exTexCoord = dvec2(tmp.x, tmp.y);
 	vec2 texCoord = f(exTexCoord);
 	outColour = texture(texSample, texCoord);
-
-	// Domain colouring
-	//outColour = texture(texSample, vec2(GetAngle(texCoord)/(2*pi), 0.1))*(sin(length(texCoord)) + 0.25);
 }
