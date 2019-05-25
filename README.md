@@ -1,8 +1,8 @@
 #Fractal Explorer
 
 ## About
-A very generic, OpenGL fragment-shader driven program that maps pixel positions in **R**^2 to
-texture positions in **R**^2 using a user-defined function, f: **R**^2 → **R**^2. 
+A very generic, OpenGL fragment-shader driven program that maps pixel positions in **R**<sup>2</sup> to
+texture positions in **R**<sup>2</sup> using a user-defined function, f: **R**<sup>2</sup> → **R**<sup>2</sup>. 
 It then colours the window pixel using the colour at the resulting texture position.
 Features ability to pan camera, zoom (manual or continuous), change maximum iterations
 (for iterative functions), and save screenshots at resolutions 4X the window size.
@@ -22,7 +22,7 @@ Features ability to pan camera, zoom (manual or continuous), change maximum iter
 * `ESC` - Exit
 
 ## Using other fractals
-To change which fractal(s) are generated, you can edit the function 'f' in frag_double.glsl. 
+To change which fractal(s) are generated, you can edit the function `f` in frag_double.glsl. 
 There are some commented example functions already there, as well as some common mathematical functions.
 Furthermore, you can change which image is used to create the colour scale by passing its file path as a command-line argument. 
 Note, if you pass it a file path, the image must be a .png or a .bmp (.jpeg not supported.)
@@ -38,5 +38,5 @@ to continue the zoom in a continuous loop.
 Will spend some time looking into source.
 
 
-##Example
+## Example
 ![Mandelbrot ](images/example_result.png)
